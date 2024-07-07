@@ -1,0 +1,16 @@
+{
+    "name": "tereta/framework.cli",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Tereta\\FrameworkCli\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Tereta Alexander",
+            "email": "atereta@gomage.com"
+        }
+    ],
+    "require": {}
+}
