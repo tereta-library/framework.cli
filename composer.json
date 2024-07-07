@@ -3,13 +3,13 @@
     "type": "library",
     "autoload": {
         "psr-4": {
-            "Tereta\\FrameworkCli\\": "src/"
+            "Tereta\\Framework\\Cli\\": "src/"
         }
     },
     "authors": [
         {
             "name": "Tereta Alexander",
-            "email": "atereta@gomage.com"
+            "email": "tereta.alexander@gmail.com"
         }
     ],
     "require": {}
