@@ -14,7 +14,7 @@ class Router {
      * @var array
      */
     private array $map = [
-        'help' => 'Framework\Cli\Help'
+        'help' => 'Framework\Cli\Help->execute'
     ];
 
     /**
@@ -36,7 +36,9 @@ class Router {
         !$command && $command = 'help';
         !isset($this->map[$command]) && throw new Exception('Command not found');
 
-        $reflectionClass = new ReflectionClass($this->map[$command]);
+        $controllerAction = $this->map[$command];
+        $controllerActionExploded = explode('->', $controllerAction);
+        $reflectionClass = new ReflectionClass($controllerActionExploded[0]);
         !$reflectionClass->isSubclassOf(AbstractCommand::class) && throw new Exception(
             "The command should be extended from " . AbstractCommand::class . " class."
         );
@@ -49,6 +51,7 @@ class Router {
                 $instance = $reflectionClass->newInstanceArgs([$arguments]);
         }
 
-        $instance->execute();
+        $reflectionMethod = $reflectionClass->getMethod($controllerActionExploded[1]);
+        $reflectionMethod->invoke($instance);
     }
 }

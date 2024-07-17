@@ -33,14 +33,24 @@ class Help extends AbstractCommand
     {
         echo "Usage: php cli.php [command] [arguments]\n";
         echo "Available commands:\n";
+
+        $maxKeyLength = 0;
         foreach ($this->map as $key => $class) {
+            if (strlen($key) > $maxKeyLength) {
+                $maxKeyLength = strlen($key);
+            }
+        }
+
+        foreach ($this->map as $key => $class) {
+            $class = explode('->', $class)[0];
             $reflectionClass = new ReflectionClass($class);
             !$reflectionClass->isSubclassOf(AbstractCommand::class) && throw new Exception(
                 "The command should be extended from " . AbstractCommand::class . " class."
             );
             $reflectionMethod = $reflectionClass->getMethod('getDescription');
             $description = $reflectionMethod->invoke(null);
-            echo "  {$key}: {$description}\n";
+            $key = str_pad($key, $maxKeyLength + 1, ' ');
+            echo "  \033[32m{$key}:\033[0m {$description}\n";
         }
     }
 }
