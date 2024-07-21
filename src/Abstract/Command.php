@@ -60,6 +60,10 @@ abstract class Command
 
     const string SYMBOL_COLOR_RESET = "\033[0m";
 
+    const string SYMBOL_NEW_LINE = "\n";
+    const string SYMBOL_UP_LINE = "\033[1A";
+    const string SYMBOL_CLEAR_LINE = "\033[K";
+
     /**
      * @return void
      */
