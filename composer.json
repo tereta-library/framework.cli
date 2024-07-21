@@ -12,5 +12,7 @@
             "email": "tereta.alexander@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "tereta/framework.helper": "^0.0.5"
+    }
 }

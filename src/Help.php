@@ -4,10 +4,25 @@ namespace Framework\Cli;
 
 use Exception;
 use Framework\Cli\Abstract\Command as AbstractCommand;
+use Framework\Helper\PhpDoc;
 use ReflectionClass;
+use ReflectionException;
 
 /**
- * Class Help
+ * ···························WWW.TERETA.DEV······························
+ * ·······································································
+ * : _____                        _                     _                :
+ * :|_   _|   ___   _ __    ___  | |_    __ _        __| |   ___  __   __:
+ * :  | |    / _ \ | '__|  / _ \ | __|  / _` |      / _` |  / _ \ \ \ / /:
+ * :  | |   |  __/ | |    |  __/ | |_  | (_| |  _  | (_| | |  __/  \ V / :
+ * :  |_|    \___| |_|     \___|  \__|  \__,_| (_)  \__,_|  \___|   \_/  :
+ * ·······································································
+ * ·······································································
+ *
+ * @class Framework\Cli\Help
+ * @package Framework\Cli
+ * @link https://tereta.dev
+ * @author Tereta Alexander <tereta.alexander@gmail.com>
  */
 class Help extends AbstractCommand
 {
@@ -22,12 +37,11 @@ class Help extends AbstractCommand
         parent::__construct($argumentValues);
     }
 
-    public static function getDescription(): string {
-        return "The command will show current registered command listing";
-    }
-
     /**
-     * @return string
+     * @cli help
+     * @cliDescription Show available commands and their descriptions
+     * @return void
+     * @throws ReflectionException
      */
     public function execute(): void
     {
@@ -41,14 +55,25 @@ class Help extends AbstractCommand
             }
         }
 
-        foreach ($this->map as $key => $class) {
-            $class = explode('->', $class)[0];
+        foreach ($this->map as $key => $routeItem) {
+            $routeItem = explode('->', $routeItem);
+            $class = $routeItem[0];
+            $method = $routeItem[1];
             $reflectionClass = new ReflectionClass($class);
             !$reflectionClass->isSubclassOf(AbstractCommand::class) && throw new Exception(
                 "The command should be extended from " . AbstractCommand::class . " class."
             );
-            $reflectionMethod = $reflectionClass->getMethod('getDescription');
-            $description = $reflectionMethod->invoke(null);
+
+            $variables = PhpDoc::getMethodVariables($class, $method);
+            $description = $variables['cliDescription'] ?? '';
+            $description = explode("\n", $description);
+            foreach ($description as $descriptionKey => $line) {
+                $description[$descriptionKey] = str_repeat(" ", $maxKeyLength + 5) . trim($line);
+            }
+
+            $description[0] = trim($description[0]);
+            $description = implode("\n", $description);
+
             $key = str_pad($key, $maxKeyLength + 1, ' ');
             echo "  \033[32m{$key}:\033[0m {$description}\n";
         }
