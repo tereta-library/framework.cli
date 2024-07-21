@@ -27,14 +27,11 @@ use ReflectionException;
 class Help extends AbstractCommand
 {
     /**
-     * @param array $argumentValues
      * @param $map
      */
     public function __construct(
-        array $argumentValues,
-        private $map = []
+        private array $map = []
     ) {
-        parent::__construct($argumentValues);
     }
 
     /**

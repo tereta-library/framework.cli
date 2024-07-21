@@ -5,6 +5,7 @@ namespace Framework\Cli;
 use Exception;
 use Framework\Cli\Abstract\Command as AbstractCommand;
 use ReflectionClass;
+use Framework\Helper\PhpDoc;
 
 /**
  * ···························WWW.TERETA.DEV······························
@@ -58,13 +59,31 @@ class Router {
 
         switch ($command) {
             case('help'):
-                $instance = $reflectionClass->newInstanceArgs([$arguments, $this->map]);
+                $instance = $reflectionClass->newInstanceArgs([$this->map]);
                 break;
             default:
-                $instance = $reflectionClass->newInstanceArgs([$arguments]);
+                $instance = $reflectionClass->newInstance();
         }
 
         $reflectionMethod = $reflectionClass->getMethod($controllerActionExploded[1]);
-        $reflectionMethod->invoke($instance);
+        if (count($reflectionMethod->getParameters()) > count($arguments)) {
+            $phpDoc = PhpDoc::getMethodVariables($controllerActionExploded[0], $controllerActionExploded[1]);
+
+            $params = is_array($phpDoc['param']) ? $phpDoc['param'] : [$phpDoc['param']];
+            $paramDescription = [];
+            foreach ($params as $paramItem) {
+                if (!preg_match('/^\w+\s+\$(\w*)\s+(.*)$/Usi', $paramItem, $matches)) continue;
+                if (!isset($matches[1]) || !$matches[1]) continue;
+                $paramDescription[$matches[1]] = isset($matches[2]) ? $matches[2] : '';
+            }
+
+            $methodParameters = [];
+            foreach ($reflectionMethod->getParameters() as $reflectionAttribute) {
+                $description = $paramDescription[$reflectionAttribute->getName()] ?? '';
+                $methodParameters[] = str_repeat(" ", 4) . $reflectionAttribute->getName() . ' - ' . $description;
+            }
+            throw new Exception("Not enough arguments, required: \n" . implode("\n", $methodParameters));
+        }
+        $reflectionMethod->invokeArgs($instance, $arguments);
     }
 }
