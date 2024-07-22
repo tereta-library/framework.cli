@@ -3,10 +3,10 @@
 namespace Framework\Cli;
 
 use Exception;
-use Framework\Cli\Abstract\Command as AbstractCommand;
 use Framework\Helper\PhpDoc;
 use ReflectionClass;
 use ReflectionException;
+use Framework\Cli\Interface\Controller;
 
 /**
  * ···························WWW.TERETA.DEV······························
@@ -24,7 +24,7 @@ use ReflectionException;
  * @link https://tereta.dev
  * @author Tereta Alexander <tereta.alexander@gmail.com>
  */
-class Help extends AbstractCommand
+class Help implements Controller
 {
     /**
      * @param $map
@@ -57,8 +57,8 @@ class Help extends AbstractCommand
             $class = $routeItem[0];
             $method = $routeItem[1];
             $reflectionClass = new ReflectionClass($class);
-            !$reflectionClass->isSubclassOf(AbstractCommand::class) && throw new Exception(
-                "The command should be extended from " . AbstractCommand::class . " class."
+            !$reflectionClass->implementsInterface(Controller::class) && throw new Exception(
+                "The command should implement the " . Controller::class . " interface."
             );
 
             $variables = PhpDoc::getMethodVariables($class, $method);

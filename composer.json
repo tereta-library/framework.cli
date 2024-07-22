@@ -13,6 +13,6 @@
         }
     ],
     "require": {
-        "tereta/framework.helper": "^0.0.10"
+        "tereta/framework.helper": "^0.0.11"
     }
 }

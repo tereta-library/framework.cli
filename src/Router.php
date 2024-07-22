@@ -3,9 +3,9 @@
 namespace Framework\Cli;
 
 use Exception;
-use Framework\Cli\Abstract\Command as AbstractCommand;
 use ReflectionClass;
 use Framework\Helper\PhpDoc;
+use Framework\Cli\Interface\Controller;
 
 /**
  * ···························WWW.TERETA.DEV······························
@@ -53,8 +53,8 @@ class Router {
         $controllerAction = $this->map[$command];
         $controllerActionExploded = explode('->', $controllerAction);
         $reflectionClass = new ReflectionClass($controllerActionExploded[0]);
-        !$reflectionClass->isSubclassOf(AbstractCommand::class) && throw new Exception(
-            "The command should be extended from " . AbstractCommand::class . " class."
+        !$reflectionClass->implementsInterface(Controller::class) && throw new Exception(
+            "The {$controllerAction} command should implement the " . Controller::class . " interface."
         );
 
         switch ($command) {
