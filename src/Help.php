@@ -56,12 +56,13 @@ class Help implements Controller
         }
 
         foreach ($this->map as $key => $routeItem) {
+            $routeItemString = $routeItem;
             $routeItem = explode('->', $routeItem);
             $class = $routeItem[0];
             $method = $routeItem[1];
             $reflectionClass = new ReflectionClass($class);
             !$reflectionClass->implementsInterface(Controller::class) && throw new Exception(
-                "The command should implement the " . Controller::class . " interface."
+                "The {$routeItemString} command should implement the " . Controller::class . " interface."
             );
 
             $variables = PhpDoc::getMethodVariables($class, $method);
