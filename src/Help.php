@@ -7,6 +7,7 @@ use Framework\Helper\PhpDoc;
 use ReflectionClass;
 use ReflectionException;
 use Framework\Cli\Interface\Controller;
+use Framework\Cli\Symbol as CliSymbol;
 
 /**
  * ···························WWW.TERETA.DEV······························
@@ -55,6 +56,7 @@ class Help implements Controller
             }
         }
 
+        $listing = [];
         foreach ($this->map as $key => $routeItem) {
             $routeItemString = $routeItem;
             $routeItem = explode('->', $routeItem);
@@ -76,7 +78,36 @@ class Help implements Controller
             $description = implode("\n", $description);
 
             $key = str_pad($key, $maxKeyLength + 1, ' ');
-            echo "  \033[32m{$key}:\033[0m {$description}\n";
+            $listing[$key] = $description;
+        }
+
+        ksort($listing);
+        $sort = [[], []];
+        foreach ($listing as $key => $description) {
+            if (count(explode(":", $key)) == 1) {
+                $sort[0][$key] = $description;
+                continue;
+            }
+
+            $sort[1][$key] = $description;
+        }
+        ksort($sort);
+
+        $listing = array_merge($sort[0], $sort[1]);
+        $explodedHeader = '';
+
+        foreach ($listing as $key => $description) {
+            $exploded = explode(":", $key);
+            if (count($exploded) == 1 && $explodedHeader != 'general') {
+                $explodedHeader = 'general';
+                echo CliSymbol::COLOR_BRIGHT_GREEN . "General\n" . CliSymbol::COLOR_RESET;
+            }
+            if (count($exploded) > 1 && $explodedHeader != $exploded[0]) {
+                $explodedHeader = $exploded[0];
+                echo CliSymbol::COLOR_BRIGHT_GREEN . "\n" . ucfirst($explodedHeader) . "\n" . CliSymbol::COLOR_RESET;
+            }
+
+            echo CliSymbol::COLOR_GREEN . "  {$key}:" . CliSymbol::COLOR_RESET . " {$description}\n";
         }
     }
 }
