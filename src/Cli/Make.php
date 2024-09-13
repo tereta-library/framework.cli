@@ -113,7 +113,7 @@ class Make implements Controller
             "class {$cliName} implements Controller\n" .
             "{\n" .
             "    /**\n" .
-            "     * @cli make:content:sample\n" .
+            "     * @cli {$cliCommand}\n" .
             "     * @cliDescription Sample CLI command\n" .
             ($parametersCommentArray ? "    " : '') . implode('    ', $parametersCommentArray) .
             "     * @return void\n" .
