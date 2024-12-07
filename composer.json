@@ -2,7 +2,7 @@
     "name": "tereta/framework.cli",
     "description": "Part of framework to process CLI commands",
     "license": "Apache-2.0",
-    "version": "0.1.20",
+    "version": "0.1.23",
     "type": "library",
     "autoload": {
         "psr-4": {
@@ -16,6 +16,6 @@
         }
     ],
     "require": {
-        "tereta/framework.helper": "^0.1.20"
+        "tereta/framework.helper": "^0.1.23"
     }
 }
