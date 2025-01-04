@@ -30,6 +30,8 @@ abstract class Symbol
     const string COLOR_PURPLE = "\033[0;35m";
     const string COLOR_CYAN = "\033[0;36m";
     const string COLOR_WHITE = "\033[0;37m";
+    const string COLOR_BLACK = "\033[0;30m";
+    const string COLOR_GRAY = "\033[1;30m";
 
     const string COLOR_BRIGHT_RED = "\033[1;31m";
     const string COLOR_BRIGHT_GREEN = "\033[1;32m";
