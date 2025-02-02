@@ -43,7 +43,7 @@ class Make implements Controller
 
     /**
      * @cli make:cli
-     * @cliDescription Make CLI class: sample "php cli make:cli Vendor/Module/Cli/Command"
+     * @cliDescription Make CLI class: sample "php cli.php make:cli Vendor/Module/Cli/Command"
      * @param string $cliCommand CLI command like "sample:execute" or "sample:group:execute"
      * @param string $cliName Full class name like "Vendor/Module/Cli/Name" or "Vendor/Module/Cli/Space/Name"
      * @param string $functionParameters Function parameters like "executeId, filterName, filterValue"
